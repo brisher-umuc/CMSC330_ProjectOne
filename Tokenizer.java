@@ -6,23 +6,40 @@ import java.io.StreamTokenizer;
  * File: Tokenizer
  * Date: 3/13/16
  * Author: ben risher
- * Purpose:
+ * Purpose: Tokenize the input stream
  */
 public class Tokenizer extends StreamTokenizer {
     public static final int NUMBER = StreamTokenizer.TT_NUMBER;
     public static final int WORD = StreamTokenizer.TT_WORD;
     public static final char QUOTE = '"';
 
+    /**
+     * Constructor
+     * @param filename string pointing to file location on disk
+     */
     Tokenizer(FileReader filename) {
         super(filename);
-    }
+    }  // end constructor
 
+    /**
+     * get the next token from the stream, but don't consume it
+     * @return BaseToken
+     */
     public BaseToken peek() {
         BaseToken tmp = getToken();
         pushBack();
-        return tmp;
-    }
+        if (tmp != null) {
+            return tmp;
+        }
+        else {
+            return new BaseToken();
+        }
+    }  // end peek
 
+    /**
+     * get the next token and consume it, progressing the stream
+     * @return BaseToken
+     */
     public BaseToken getToken() {
         int token = -43214;
 
@@ -34,23 +51,14 @@ public class Tokenizer extends StreamTokenizer {
             System.exit(-1);
         }
 
-
-        switch (token) {
+        switch (token) {  // primary logic for determining token type
             case WORD:
-                for (KeyWord.Type kwt : KeyWord.Type.values()) {
+                for (KeyWord.Type kwt : KeyWord.Type.values()) {  // proceses keywords
                     if (kwt.name().equals(sval)) {
-                        try {
-                            return new KeyWord(sval);
-                        }
-                        catch (ParseError e) {
-                            e.printStackTrace();
-                            System.exit(-1);
-                        }
+                        return new KeyWord(sval);
                     }
                 }
-
-                if (sval.equals("End.")) {
-                    // this should only ever be 'End.'
+                if (sval.equals("End.")) {  // didn't mark . as a normal character, so I have a separate case for exiting easily
                     return new Token(sval);
                 }
                 break;
@@ -67,26 +75,7 @@ public class Tokenizer extends StreamTokenizer {
                     }
                 }
                 break;
-
         }
-        return null;
-    }
-
-    public static void main(String[] args) {
-        //TODO: file chooser
-        String filename = "input.txt";
-        try {
-            FileReader reader = new FileReader(filename);
-            Tokenizer stream = new Tokenizer(reader);
-            System.out.println(stream.getToken());
-            System.out.println(stream.peek());
-            System.out.println(stream.peek());
-            System.out.println(stream.getToken());
-            System.out.println(stream.getToken());
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-    } // end main
-
+        return new BaseToken();
+    }  // end getToken
 }  // end Tokenizer

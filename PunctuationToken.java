@@ -2,12 +2,12 @@
  * File: PunctuationToken
  * Date: 3/13/16
  * Author: ben risher
- * Purpose:
+ * Purpose: class representing a Token housing a form of punctuation
  */
 public class PunctuationToken extends BaseToken {
     private Type type = null;
 
-    public enum Type {
+    public enum Type {  // enum with input instead of default name
         LEFT_PAREN("("),
         COMMA(","),
         RIGHT_PAREN(")"),
@@ -28,16 +28,12 @@ public class PunctuationToken extends BaseToken {
         public String toString() {
             return this.value;
         }
-    }
+    }  // end enum
 
-    public Type getType() {
-        return type;
-    }
-
-    public void setType(Type t) {
-        type = t;
-    }
-
+    /**
+     * Constructor
+     * @param s sets punctuation type, see enum PunctuationToken.Type for list of possible types
+     */
     public PunctuationToken(String s) {
         for (Type t: Type.values()) {
             if (t.value.equals(s)) {
@@ -45,12 +41,23 @@ public class PunctuationToken extends BaseToken {
                 break;
             }
         }
+    } // end constructor
 
+    // getters / setters
+    public Type getType() {
+        return type;
+    }
+    public void setType(Type t) {
+        type = t;
     }
 
+    /**
+     * simple getter to get the more friendly name of the token
+     * @return String; type of token
+     */
     public String getName() {
         return type.name();
-    }
+    } // end getName
 
     public String toString() {
         if (type != null) {
@@ -59,7 +66,5 @@ public class PunctuationToken extends BaseToken {
         else {
             return "";
         }
-
-    }
-
-}
+    } // end toString
+} // end PunctuationToken

@@ -8,4 +8,4 @@ public class BaseToken {
     public String getName() {
         return "";
     }
-}
+}  // end BaseToken
